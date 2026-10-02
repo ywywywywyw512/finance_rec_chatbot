@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Finanfit AI 상담</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                "Noto Sans KR",
+                sans-serif;
+
+            background: #f7f7fa;
+
+            height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        header {
+
+            height: 72px;
+
+            min-height: 72px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #e8e8e8;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            padding:
+                0 35px;
+
+        }
+
+
+        .logo {
+
+            width: 160px;
+
+        }
+
+
+        .back {
+
+            text-decoration: none;
+
+            color: #555;
+
+            padding:
+                9px 15px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid #ddd;
+
+        }
+
+
+        .layout {
+
+            flex: 1;
+
+            display: flex;
+
+            max-width: 1100px;
+
+            width: 100%;
+
+            margin: auto;
+
+            overflow: hidden;
+
+            background: white;
+
+        }
+
+
+        .sidebar {
+
+            width: 255px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #2c0e5b,
+                    #4f1a8f
+                );
+
+            color: white;
+
+            padding: 28px 20px;
+
+        }
+
+
+        .bot-image {
+
+            width: 95px;
+
+            height: 95px;
+
+            border-radius: 50%;
+
+            object-fit: contain;
+
+            background: white;
+
+            padding: 3px;
+
+            display: block;
+
+            margin:
+                0 auto 20px;
+
+        }
+
+
+        .sidebar h2 {
+
+            text-align: center;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .sidebar p {
+
+            text-align: center;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .75
+                );
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+        }
+
+
+        .user-box {
+
+            margin-top: 30px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .12
+                );
+
+            border-radius: 14px;
+
+            padding: 16px;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+
+        }
+
+
+        .chat {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 0;
+
+        }
+
+
+        .chat-header {
+
+            height: 75px;
+
+            padding:
+                0 25px;
+
+            border-bottom:
+                1px solid #eee;
+
+            display: flex;
+
+            align-items: center;
+
+        }
+
+
+        .chat-header h2 {
+
+            margin: 0;
+
+            font-size: 19px;
+
+        }
+
+
+        .status {
+
+            width: 9px;
+
+            height: 9px;
+
+            background: #14c56e;
+
+            border-radius: 50%;
+
+            margin-right: 10px;
+
+        }
+
+
+        .messages {
+
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 30px;
+
+            background: #fafafa;
+
+        }
+
+
+        .message-row {
+
+            display: flex;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .message-row.user {
+
+            justify-content:
+                flex-end;
+
+        }
+
+
+        .message {
+
+            max-width: 72%;
+
+            border-radius:
+                18px;
+
+            padding:
+                14px 17px;
+
+            line-height: 1.65;
+
+            font-size: 15px;
+
+            white-space: pre-wrap;
+
+        }
+
+
+        .bot .message {
+
+            background: white;
+
+            border:
+                1px solid #e5e5e5;
+
+            border-top-left-radius: 4px;
+
+            box-shadow:
+                0 2px 8px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .04
+                );
+
+        }
+
+
+        .user .message {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5930a0,
+                    #7c42df
+                );
+
+            color: white;
+
+            border-top-right-radius: 4px;
+
+        }
+
+
+        .chat-input {
+
+            padding: 20px 25px;
+
+            border-top:
+                1px solid #eee;
+
+            background: white;
+
+            display: flex;
+
+            gap: 12px;
+
+        }
+
+
+        #message {
+
+            flex: 1;
+
+            border:
+                1px solid #ddd;
+
+            border-radius: 15px;
+
+            padding:
+                15px;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+
+        #message:focus {
+
+            border-color:
+                #7442cd;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    116,
+                    66,
+                    205,
+                    .1
+                );
+
+        }
+
+
+        button {
+
+            width: 100px;
+
+            border: 0;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4e218b,
+                    #7b43d8
+                );
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .quick {
+
+            margin-top: 25px;
+
+        }
+
+
+        .quick button {
+
+            width: 100%;
+
+            padding: 10px;
+
+            margin-top: 8px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .2
+                );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .08
+                );
+
+            font-size: 12px;
+
+        }
+
+
+        @media(max-width: 760px) {
+
+            .sidebar {
+
+                display: none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <img
+        class="logo"
+        src="/static/logo.png"
+    >
+
+    <a
+        class="back"
+        href="/main"
+    >
+        ← 추천상품
+    </a>
+
+</header>
+
+
+<div class="layout">
+
+
+    <aside class="sidebar">
+
+
+        <img
+            class="bot-image"
+            src="/static/chatbot.png"
+        >
+
+
+        <h2>
+            Finanfit AI
+        </h2>
+
+
+        <p>
+            나의 금융정보와 실제 예금상품 데이터를 바탕으로 상담해드려요.
+        </p>
+
+
+        <div class="user-box">
+
+            <b>{{ user.name }}님의 정보</b>
+
+            <br>
+
+            {{ user.age }}세
+
+            <br>
+
+            {{ user.investment_type }}
+
+            <br>
+
+            {{ user.job }}
+
+            <br>
+
+            연소득 {{ user.income }}만원
+
+        </div>
+
+
+        <div class="quick">
+
+            <button
+                onclick="quickMessage('금리가 높은 예금 추천해줘')"
+            >
+                금리 높은 예금
+            </button>
+
+
+            <button
+                onclick="quickMessage('내 투자성향에 맞는 상품 추천해줘')"
+            >
+                나에게 맞는 상품
+            </button>
+
+
+            <button
+                onclick="quickMessage('가입기간이 짧은 상품 추천해줘')"
+            >
+                단기 예금 추천
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <section class="chat">
+
+
+        <div class="chat-header">
+
+            <div class="status"></div>
+
+            <h2>
+                금융상품 상담
+            </h2>
+
+        </div>
+
+
+        <div
+            class="messages"
+            id="messages"
+        >
+
+
+            <div class="message-row bot">
+
+                <div class="message">
+안녕하세요 {{ user.name }}님! 👋
+
+Finanfit AI 상담사입니다.
+
+예금 금리 비교, 가입기간, 가입금액, {{ user.investment_type }} 성향에 맞는 상품 등을 물어보세요.
+
+예) "1년 예금 중 금리 높은 상품 추천해줘"
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="chat-input">
+
+
+            <input
+                id="message"
+                placeholder="금융상품에 대해 물어보세요..."
+                autocomplete="off"
+            >
+
+
+            <button
+                onclick="sendMessage()"
+                id="sendButton"
+            >
+                전송
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+<script>
+
+
+    const messageInput =
+        document.getElementById(
+            "message"
+        );
+
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+
+    messageInput.addEventListener(
+        "keydown",
+
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+    function quickMessage(text) {
+
+        messageInput.value = text;
+
+        sendMessage();
+
+    }
+
+
+    function addMessage(
+        text,
+        type
+    ) {
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "message-row "
+            +
+            type;
+
+
+        const bubble =
+            document.createElement(
+                "div"
+            );
+
+
+        bubble.className =
+            "message";
+
+
+        bubble.textContent =
+            text;
+
+
+        row.appendChild(
+            bubble
+        );
+
+
+        messages.appendChild(
+            row
+        );
+
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+
+        return bubble;
+
+    }
+
+
+    async function sendMessage() {
+
+
+        const text =
+            messageInput.value.trim();
+
+
+        if (!text) {
+            return;
+        }
+
+
+        addMessage(
+            text,
+            "user"
+        );
+
+
+        messageInput.value =
+            "";
+
+
+        const loadingBubble =
+            addMessage(
+                "답변을 준비하고 있어요...",
+                "bot"
+            );
+
+
+        document.getElementById(
+            "sendButton"
+        ).disabled = true;
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/api/chat",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                {
+                                    message:
+                                        text
+                                }
+                            )
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            loadingBubble.textContent =
+                data.answer;
+
+
+        }
+        catch(error) {
+
+
+            loadingBubble.textContent =
+                "AI 상담 서버 연결에 실패했습니다.";
+
+
+        }
+
+
+        document.getElementById(
+            "sendButton"
+        ).disabled = false;
+
+
+        messageInput.focus();
+
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>

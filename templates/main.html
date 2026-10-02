@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Finanfit 추천상품</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                "Noto Sans KR",
+                sans-serif;
+
+            background:
+                #f6faf9;
+
+            color: #222;
+
+        }
+
+
+        header {
+
+            height: 78px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #eee;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            padding:
+                0 50px;
+
+        }
+
+
+        .logo {
+
+            width: 175px;
+
+        }
+
+
+        .header-right {
+
+            display: flex;
+
+            gap: 17px;
+
+            align-items: center;
+
+        }
+
+
+        .profile-mini {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            background: #ddd;
+
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            color: #777;
+
+            font-size: 14px;
+
+        }
+
+
+        .wrap {
+
+            max-width: 1200px;
+
+            width: 90%;
+
+            margin:
+                45px auto;
+
+        }
+
+
+        .welcome {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00a89c,
+                    #00c9ad
+                );
+
+            border-radius:
+                26px;
+
+            padding:
+                40px;
+
+            color: white;
+
+            margin-bottom:
+                38px;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+        }
+
+
+        .welcome h1 {
+
+            margin: 0 0 12px;
+
+            font-size: 32px;
+
+        }
+
+
+        .welcome p {
+
+            margin: 0;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.88
+                );
+
+            line-height: 1.7;
+
+        }
+
+
+        .profile-large {
+
+            width: 90px;
+
+            height: 90px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border:
+                4px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.7
+                );
+
+        }
+
+
+        .profile-placeholder {
+
+            width: 90px;
+
+            height: 90px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.25
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 34px;
+
+            font-weight: bold;
+
+        }
+
+
+        .user-tags {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-top: 20px;
+
+        }
+
+
+        .tag {
+
+            padding:
+                8px 13px;
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.18
+                );
+
+            font-size: 14px;
+
+        }
+
+
+        .section-title {
+
+            font-size: 27px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .section-desc {
+
+            color: #777;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap: 22px;
+
+        }
+
+
+        .card {
+
+            position: relative;
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+            transition:
+                .25s;
+
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                0 18px 50px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.1
+                );
+
+        }
+
+
+        .rank {
+
+            position: absolute;
+
+            top: 20px;
+
+            right: 20px;
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 50%;
+
+            background: #eee9ff;
+
+            color: #6532c9;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
+
+        }
+
+
+        .bank {
+
+            color: #00a89c;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .product-name {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            min-height: 55px;
+
+            padding-right: 35px;
+
+        }
+
+
+        .rate-area {
+
+            margin:
+                25px 0;
+
+            padding:
+                18px;
+
+            border-radius:
+                15px;
+
+            background: #f2fbf9;
+
+        }
+
+
+        .rate-label {
+
+            color: #777;
+
+            font-size: 13px;
+
+        }
+
+
+        .rate {
+
+            font-size: 31px;
+
+            color: #00a89c;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+
+        }
+
+
+        .info {
+
+            border-top:
+                1px solid #eee;
+
+            padding:
+                12px 0;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+
+            font-size: 14px;
+
+        }
+
+
+        .info span:first-child {
+
+            color: #888;
+
+            min-width: 65px;
+
+        }
+
+
+        .info span:last-child {
+
+            text-align: right;
+
+            font-weight: 500;
+
+        }
+
+
+        .detail {
+
+            display: block;
+
+            margin-top: 20px;
+
+            height: 45px;
+
+            line-height: 45px;
+
+            border-radius: 10px;
+
+            background: #222;
+
+            color: white;
+
+            text-align: center;
+
+            text-decoration: none;
+
+        }
+
+
+        .chatbot-button {
+
+            position: fixed;
+
+            right: 35px;
+
+            bottom: 30px;
+
+            width: 82px;
+
+            height: 82px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            box-shadow:
+                0 8px 30px
+                rgba(
+                    64,
+                    22,
+                    120,
+                    0.25
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            transition: .2s;
+
+        }
+
+
+        .chatbot-button:hover {
+
+            transform:
+                scale(1.08);
+
+        }
+
+
+        .chatbot-button img {
+
+            width: 75px;
+
+            height: 75px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+
+        }
+
+
+        .chat-label {
+
+            position: fixed;
+
+            right: 40px;
+
+            bottom: 120px;
+
+            background: #48208c;
+
+            color: white;
+
+            padding:
+                10px 14px;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            box-shadow:
+                0 5px 15px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .15
+                );
+
+        }
+
+
+        @media(max-width: 950px) {
+
+            .cards {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+
+    <img
+        class="logo"
+        src="/static/logo.png"
+        alt="Finanfit"
+    >
+
+
+    <div class="header-right">
+
+
+        {% if user.profile_image %}
+
+        <img
+            class="profile-mini"
+            src="{{ user.profile_image }}"
+        >
+
+        {% endif %}
+
+
+        <span>
+            {{ user.name }}님
+        </span>
+
+
+        <a
+            class="logout"
+            href="/logout"
+        >
+            로그아웃
+        </a>
+
+
+    </div>
+
+
+</header>
+
+
+<main class="wrap">
+
+
+    <section class="welcome">
+
+
+        <div>
+
+
+            <h1>
+                {{ user.name }}님을 위한 금융 Fit
+            </h1>
+
+
+            <p>
+                입력한 금융정보를 기준으로
+                <br>
+                현재 조건에 어울리는 예금상품을 추천했어요.
+            </p>
+
+
+            <div class="user-tags">
+
+                <div class="tag">
+                    {{ user.age }}세
+                </div>
+
+                <div class="tag">
+                    {{ user.investment_type }}
+                </div>
+
+                <div class="tag">
+                    {{ user.job }}
+                </div>
+
+                <div class="tag">
+                    연소득 {{ "{:,}".format(user.income) }}만원
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        {% if user.profile_image %}
+
+        <img
+            class="profile-large"
+            src="{{ user.profile_image }}"
+        >
+
+        {% else %}
+
+        <div class="profile-placeholder">
+            {{ user.name[0] }}
+        </div>
+
+        {% endif %}
+
+
+    </section>
+
+
+    <h2 class="section-title">
+        추천 금융상품 TOP 3
+    </h2>
+
+
+    <p class="section-desc">
+        나이 · 투자성향 · 직업 · 소득 · 금리를 종합해 추천했습니다.
+    </p>
+
+
+    <div class="cards">
+
+
+        {% for product in products %}
+
+
+        <article class="card">
+
+
+            <div class="rank">
+                {{ loop.index }}
+            </div>
+
+
+            <div class="bank">
+                {{ product.bank }}
+            </div>
+
+
+            <div class="product-name">
+                {{ product.name }}
+            </div>
+
+
+            <div class="rate-area">
+
+                <div class="rate-label">
+                    최고금리
+                </div>
+
+                <div class="rate">
+                    연 {{ product.max_rate }}%
+                </div>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>
+                    기본금리
+                </span>
+
+                <span>
+                    {{ product.base_rate }}%
+                </span>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>
+                    가입기간
+                </span>
+
+                <span>
+                    {{ product.period }}
+                </span>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>
+                    가입금액
+                </span>
+
+                <span>
+                    {{ product.amount }}
+                </span>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>
+                    가입방법
+                </span>
+
+                <span>
+                    {{ product.method }}
+                </span>
+
+            </div>
+
+
+            {% if product.url %}
+
+            <a
+                class="detail"
+                href="{{ product.url }}"
+                target="_blank"
+            >
+                상품 자세히 보기
+            </a>
+
+            {% endif %}
+
+
+        </article>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+</main>
+
+
+<div class="chat-label">
+    AI에게 금융상품 물어보기
+</div>
+
+
+<a
+    class="chatbot-button"
+    href="/chatbot"
+>
+
+    <img
+        src="/static/chatbot.png"
+        alt="챗봇"
+    >
+
+</a>
+
+
+</body>
+
+</html>
